@@ -6,7 +6,7 @@ import org.json.JSONObject
 
 class AccountParser {
 
-    fun getAccountsFromJson(accountArray: JSONArray) : MutableList<Account> {
+    fun getAccountsFromJson(accountArray: JSONArray) : List<Account> {
         val accounts = mutableListOf<Account>()
 
         for(i in 0..(accountArray.length() - 1)) {

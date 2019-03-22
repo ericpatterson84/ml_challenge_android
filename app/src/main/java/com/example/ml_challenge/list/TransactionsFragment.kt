@@ -11,47 +11,42 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.ml_challenge.R
 import com.example.ml_challenge.data.Account
+import com.example.ml_challenge.data.Transaction
 
 import com.example.ml_challenge.list.dummy.DummyContent
 import com.example.ml_challenge.list.dummy.DummyContent.DummyItem
-import com.example.ml_challenge.model.IAccountsModel
 import com.example.ml_challenge.parser.AccountParser
+import com.example.ml_challenge.parser.TransactionParser
 import org.json.JSONArray
 import java.io.BufferedReader
 
 /**
  * A fragment representing a list of Items.
  * Activities containing this fragment MUST implement the
- * [AccountsFragment.OnListFragmentInteractionListener] interface.
+ * [TransactionsFragment.OnListFragmentInteractionListener] interface.
  */
-class AccountsFragment : Fragment() {
+class TransactionsFragment : Fragment() {
 
     // TODO: Customize parameters
     private var columnCount = 1
 
     private var listener: OnListFragmentInteractionListener? = null
 
-    private var accountList : List<Account>? = null
+    private var transactionMap : Map<UInt, List<Transaction>>? = null
 
-    private var accountsModel: IAccountsModel? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    fun setModel(model: IAccountsModel) {
-        accountsModel = model
+        arguments?.let {
+            columnCount = it.getInt(ARG_COLUMN_COUNT)
+        }
     }
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        arguments?.let {
-//            columnCount = it.getInt(ARG_COLUMN_COUNT)
-//        }
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_accounts_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_transactions_list, container, false)
 
         // Set the adapter
         if (view is RecyclerView) {
@@ -60,10 +55,8 @@ class AccountsFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-//                adapter = AccountsRecyclerViewAdapter(DummyContent.ITEMS, listener)
-                accountList?.let {
-                    adapter = AccountsRecyclerViewAdapter(accountList!!, listener)
-                }
+//                adapter = TransactionsRecyclerViewAdapter(DummyContent.ITEMS, listener)
+
             }
         }
         return view
@@ -71,11 +64,18 @@ class AccountsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnListFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
+
+        val transactionsJsonStr = readRawTextFile(context, R.raw.account_transactions)
+        transactionsJsonStr?.let {
+            val transactionsJsonArray = JSONArray(it)
+            val parser = TransactionParser()
+            transactionMap = parser.getTransactionsFromJson(transactionsJsonArray)
         }
+    }
+
+    private fun readRawTextFile(ctx: Context, resId: Int): String? {
+        val inputStream = ctx.resources.openRawResource(resId)
+        return inputStream.bufferedReader().use(BufferedReader::readText)
     }
 
     override fun onDetach() {
@@ -96,7 +96,21 @@ class AccountsFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-//        fun onListFragmentInteraction(item: DummyItem?)
-        fun onListFragmentInteraction(item: Account?)
+        fun onListFragmentInteraction(item: DummyItem?)
+    }
+
+    companion object {
+
+        // TODO: Customize parameter argument names
+        const val ARG_COLUMN_COUNT = "column-count"
+
+        // TODO: Customize parameter initialization
+        @JvmStatic
+        fun newInstance(columnCount: Int) =
+            TransactionsFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_COLUMN_COUNT, columnCount)
+                }
+            }
     }
 }

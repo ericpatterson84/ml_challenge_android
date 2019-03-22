@@ -3,12 +3,35 @@ package com.example.ml_challenge.parser
 import com.example.ml_challenge.data.Transaction
 import org.json.JSONArray
 import org.json.JSONObject
+import java.lang.NumberFormatException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class TransactionParser {
 
-    fun getTransactionsFromJson(transactionArray: JSONArray) : MutableList<Transaction> {
+    fun getTransactionsFromJson(rootArray: JSONArray) : Map<UInt, List<Transaction>> {
+        var accountTransactionMap = mutableMapOf<UInt, List<Transaction>>()
+
+        for(i in 0..(rootArray.length() - 1)) {
+            val accountObj = rootArray.getJSONObject(i)
+            accountObj?.let {
+                for(key in it.keys()) {
+                    val accountId = key.toUIntOrNull()
+                    accountId?.let { id ->
+                        val accountTransactionArray = it.getJSONArray(key)
+                        accountTransactionArray?.let { jsonArray ->
+                            val transactionList = parseTransactionsForAccount(jsonArray)
+                            accountTransactionMap.put(id, transactionList)
+                        }
+                    }
+                }
+            }
+        }
+
+        return accountTransactionMap
+    }
+
+    private fun parseTransactionsForAccount(transactionArray: JSONArray) : List<Transaction> {
         val transactions = mutableListOf<Transaction>()
 
         for(i in 0..(transactionArray.length() - 1)) {
@@ -29,7 +52,7 @@ class TransactionParser {
         return transactions
     }
 
-    fun parseTransactionObject(transactionObj: JSONObject) : Transaction {
+    private fun parseTransactionObject(transactionObj: JSONObject) : Transaction {
 //        {
 //            "id": 158,
 //            "date": "2017-11-30",

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.ml_challenge.R
 import com.example.ml_challenge.data.Transaction
+import com.example.ml_challenge.data.TransactionsOfDate
 
 
 import com.example.ml_challenge.list.dummy.DummyContent.DummyItem
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_transactions.view.*
  */
 class TransactionsRecyclerViewAdapter(
 //    private val mValues: List<DummyItem>,
-    private val mValues: List<Transaction>
+    private val mValues: List<TransactionsOfDate>
 ) : RecyclerView.Adapter<TransactionsRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,7 +34,15 @@ class TransactionsRecyclerViewAdapter(
         holder.mContentView.text = item.amount.toString()
     }
 
-    override fun getItemCount(): Int = mValues.size
+    override fun getItemCount(): Int {
+        var itemCount = mValues.size
+
+        for(tod in mValues) {
+            itemCount += tod.transactions.size
+        }
+
+        return itemCount
+    }
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         val mIdView: TextView = mView.item_number

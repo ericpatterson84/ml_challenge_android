@@ -3,15 +3,16 @@ package com.example.ml_challenge.model
 import android.content.Context
 import com.example.ml_challenge.R
 import com.example.ml_challenge.data.Transaction
+import com.example.ml_challenge.data.TransactionsOfDate
 import com.example.ml_challenge.parser.TransactionParser
 import org.json.JSONArray
 import java.io.BufferedReader
 
 class JsonTransactionsModel : ITransactionModel {
 
-    private var transactionMap = emptyMap<UInt, List<Transaction>>()
+    private var transactionMap = emptyMap<UInt, List<TransactionsOfDate>>()
 
-    fun populateModel(context: Context) {
+    override fun populateModel(context: Context) {
         if(transactionMap.isEmpty()) {
             val inputStream = context.resources.openRawResource(R.raw.account_transactions)
             val transactionJsonStr = inputStream.bufferedReader().use(BufferedReader::readText)
@@ -24,7 +25,7 @@ class JsonTransactionsModel : ITransactionModel {
         }
     }
 
-    override fun getTransactionsForAccount(accountId: UInt): List<Transaction>? {
+    override fun getTransactionsForAccount(accountId: UInt): List<TransactionsOfDate>? {
         return transactionMap[accountId]
     }
 }

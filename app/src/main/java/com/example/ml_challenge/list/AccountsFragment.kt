@@ -15,6 +15,7 @@ import com.example.ml_challenge.data.Account
 import com.example.ml_challenge.list.dummy.DummyContent
 import com.example.ml_challenge.list.dummy.DummyContent.DummyItem
 import com.example.ml_challenge.model.IAccountsModel
+import com.example.ml_challenge.model.JsonAccountsModel
 import com.example.ml_challenge.parser.AccountParser
 import org.json.JSONArray
 import java.io.BufferedReader
@@ -22,7 +23,7 @@ import java.io.BufferedReader
 /**
  * A fragment representing a list of Items.
  * Activities containing this fragment MUST implement the
- * [AccountsFragment.OnListFragmentInteractionListener] interface.
+ * [AccountsFragment.OnAccountListInteractionListener] interface.
  */
 class AccountsFragment : Fragment() {
 
@@ -31,13 +32,7 @@ class AccountsFragment : Fragment() {
 
     private var listener: OnAccountListInteractionListener? = null
 
-//    private var accountList : List<Account>? = null
-
-    private var accountsModel: IAccountsModel? = null
-
-    fun setModel(model: IAccountsModel) {
-        accountsModel = model
-    }
+    var model: IAccountsModel? = null
 
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -61,7 +56,7 @@ class AccountsFragment : Fragment() {
                     else -> GridLayoutManager(context, columnCount)
                 }
 //                adapter = AccountsRecyclerViewAdapter(DummyContent.ITEMS, listener)
-                accountsModel?.let {
+                model?.let {
                     adapter = AccountsRecyclerViewAdapter(it.getAllAccounts(), listener)
                 }
             }
@@ -76,6 +71,11 @@ class AccountsFragment : Fragment() {
         } else {
             throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
         }
+
+        if(model == null) {
+            model = JsonAccountsModel()
+        }
+        model?.let { it.populateModel(context) }
     }
 
     override fun onDetach() {

@@ -13,6 +13,7 @@ import com.example.ml_challenge.list.AccountsFragment.OnAccountListInteractionLi
 import com.example.ml_challenge.list.dummy.DummyContent.DummyItem
 
 import kotlinx.android.synthetic.main.fragment_accounts.view.*
+import kotlinx.android.synthetic.main.fragment_transactions.view.*
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
@@ -45,8 +46,9 @@ class AccountsRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item.name
-        holder.mContentView.text = item.balance.toString()
+        holder.mIdView.text = item.number
+        holder.mNameView.text = item.name
+        holder.mBalanceView.text = item.balance.toString()
 
         with(holder.mView) {
             tag = item
@@ -57,11 +59,12 @@ class AccountsRecyclerViewAdapter(
     override fun getItemCount(): Int = mValues.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.item_number
-        val mContentView: TextView = mView.content
+        val mIdView: TextView = mView.account_num
+        val mNameView: TextView = mView.account_name
+        val mBalanceView: TextView = mView.account_balance
 
         override fun toString(): String {
-            return super.toString() + " '" + mContentView.text + "'"
+            return super.toString() + " '" + mNameView.text + "'"
         }
     }
 }

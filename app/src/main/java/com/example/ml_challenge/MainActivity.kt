@@ -17,23 +17,26 @@ import java.io.BufferedReader
 
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), AccountsFragment.OnAccountListInteractionListener {
+class MainActivity : AppCompatActivity() {
 
-    var accountsModel: JsonAccountsModel? = null
-    var transactionsModel: JsonTransactionsModel? = null
+//    var accountsModel: JsonAccountsModel? = null
+//    var transactionsModel: JsonTransactionsModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar?.let {
+            it.hide()
+        }
 
         if (savedInstanceState == null) {
             // TODO: Logic for Open button visibility
         }
 
         openBtn.setOnClickListener{
-            if(accountsModel == null) {
-                accountsModel = JsonAccountsModel()
-            }
+//            if(accountsModel == null) {
+//                accountsModel = JsonAccountsModel()
+//            }
             showAccountsList()
         }
     }
@@ -73,13 +76,5 @@ class MainActivity : AppCompatActivity(), AccountsFragment.OnAccountListInteract
 //        }
     }
 
-    override fun onAccountListInteraction(item: Account?) {
-        item?.let {
-            println("Account ID: " + it.id)
-            if(transactionsModel == null) {
-                transactionsModel = JsonTransactionsModel()
-            }
-            showTransactionsList(it.id)
-        }
-    }
+
 }

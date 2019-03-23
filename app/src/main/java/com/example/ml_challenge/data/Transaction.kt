@@ -13,7 +13,6 @@ import java.util.*
 //}
 
 class Transaction(val id: Int,
-                  val date: LocalDate,
                   val description: String,
                   val amount: Double,
                   val balance: Double,

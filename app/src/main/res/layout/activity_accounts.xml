@@ -5,13 +5,14 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".AccountsActivity">
-
+        tools:context=".AccountsActivity"
+        android:background="@color/colorPrimary">
 
     <fragment
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/accountsFragment"
+            android:name="com.example.ml_challenge.list.AccountsFragment"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

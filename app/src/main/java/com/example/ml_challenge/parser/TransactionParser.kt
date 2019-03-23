@@ -1,6 +1,7 @@
 package com.example.ml_challenge.parser
 
 import com.example.ml_challenge.data.Transaction
+import com.example.ml_challenge.data.TransactionsOfDate
 import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.NumberFormatException
@@ -9,8 +10,8 @@ import java.time.format.DateTimeFormatter
 
 class TransactionParser {
 
-    fun getTransactionsFromJson(rootArray: JSONArray) : Map<UInt, List<Transaction>> {
-        var accountTransactionMap = mutableMapOf<UInt, List<Transaction>>()
+    fun getTransactionsFromJson(rootArray: JSONArray) : Map<UInt, List<TransactionsOfDate>> {
+        var accountTransactionMap = mutableMapOf<UInt, List<TransactionsOfDate>>()
 
         for(i in 0..(rootArray.length() - 1)) {
             val accountObj = rootArray.getJSONObject(i)
@@ -31,19 +32,34 @@ class TransactionParser {
         return accountTransactionMap
     }
 
-    private fun parseTransactionsForAccount(transactionArray: JSONArray) : List<Transaction> {
+    private fun parseTransactionsForAccount(transactionsForAccount: JSONArray) : List<TransactionsOfDate> {
+        val transactionsOfDates = mutableListOf<TransactionsOfDate>()
+
+        for(i in 0..(transactionsForAccount.length() - 1)) {
+            val dateObj = transactionsForAccount.getJSONObject(i)
+            dateObj?.let {
+                if (it.has("date")) {
+                    val date = it.getString("date")
+                    var transactionsOfDate = TransactionsOfDate(date)
+                    transactionsOfDate.transactions = parseTransactionsForDate(it)
+                    transactionsOfDates.add(transactionsOfDate)
+                }
+            }
+        }
+
+        return transactionsOfDates
+    }
+
+    private fun parseTransactionsForDate(dateObj: JSONObject) : List<Transaction> {
         val transactions = mutableListOf<Transaction>()
 
-        for(i in 0..(transactionArray.length() - 1)) {
-            val dateObj = transactionArray.getJSONObject(i)
-            dateObj?.let {
-                if(it.has("activity")) {
-                    val activityArray = it.getJSONArray("activity")
-                    activityArray?.let {activityArray ->
-                        for(i in 0..(activityArray.length() - 1)) {
-                            val activityObj = activityArray.getJSONObject(i)
-                            transactions.add(parseTransactionObject(activityObj))
-                        }
+        dateObj?.let {
+            if(it.has("activity")) {
+                val activityArray = it.getJSONArray("activity")
+                activityArray?.let {activityArray ->
+                    for(i in 0..(activityArray.length() - 1)) {
+                        val activityObj = activityArray.getJSONObject(i)
+                        transactions.add(parseTransactionObject(activityObj))
                     }
                 }
             }
@@ -62,8 +78,6 @@ class TransactionParser {
 //            "transaction_uid": 7980194686
 //        },
         val id = transactionObj.getInt("id")
-        val dateStr = transactionObj.getString("date")
-        val date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_DATE)
         val desc = transactionObj.getString("description")
 
         var amount = 0.0
@@ -76,6 +90,6 @@ class TransactionParser {
         val balance = transactionObj.getDouble("balance")
         val uid = transactionObj.getLong("transaction_uid")
 
-        return Transaction(id, date, desc, amount, balance, uid)
+        return Transaction(id, desc, amount, balance, uid)
     }
 }

@@ -15,6 +15,7 @@ import com.example.ml_challenge.data.Transaction
 
 import com.example.ml_challenge.list.dummy.DummyContent
 import com.example.ml_challenge.list.dummy.DummyContent.DummyItem
+import com.example.ml_challenge.model.ITransactionModel
 import com.example.ml_challenge.parser.AccountParser
 import com.example.ml_challenge.parser.TransactionParser
 import org.json.JSONArray
@@ -22,23 +23,18 @@ import java.io.BufferedReader
 
 /**
  * A fragment representing a list of Items.
- * Activities containing this fragment MUST implement the
- * [TransactionsFragment.OnListFragmentInteractionListener] interface.
  */
 class TransactionsFragment : Fragment() {
 
-    // TODO: Customize parameters
-    private var columnCount = 1
+    private var accountId = 0U
 
-    private var listener: OnListFragmentInteractionListener? = null
-
-    private var transactionMap : Map<UInt, List<Transaction>>? = null
+    var model : ITransactionModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
+            accountId = it.getInt(ARG_ACCOUNT_ID).toUInt()
         }
     }
 
@@ -51,65 +47,28 @@ class TransactionsFragment : Fragment() {
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
+                layoutManager = LinearLayoutManager(context)
 //                adapter = TransactionsRecyclerViewAdapter(DummyContent.ITEMS, listener)
-
+                model?.let {
+                    val transactions = it.getTransactionsForAccount(accountId)
+                    transactions?.let { t ->
+                        adapter = TransactionsRecyclerViewAdapter(t)
+                    }
+                }
             }
         }
         return view
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        val transactionsJsonStr = readRawTextFile(context, R.raw.account_transactions)
-        transactionsJsonStr?.let {
-            val transactionsJsonArray = JSONArray(it)
-            val parser = TransactionParser()
-            transactionMap = parser.getTransactionsFromJson(transactionsJsonArray)
-        }
-    }
-
-    private fun readRawTextFile(ctx: Context, resId: Int): String? {
-        val inputStream = ctx.resources.openRawResource(resId)
-        return inputStream.bufferedReader().use(BufferedReader::readText)
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson
-     * [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem?)
-    }
-
     companion object {
 
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
+        private const val ARG_ACCOUNT_ID = "account-id"
 
-        // TODO: Customize parameter initialization
         @JvmStatic
-        fun newInstance(columnCount: Int) =
+        fun newInstance(accountId: UInt) =
             TransactionsFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
+                    putInt(ARG_ACCOUNT_ID, accountId.toInt())
                 }
             }
     }

@@ -9,32 +9,17 @@ import com.example.ml_challenge.R
 import com.example.ml_challenge.data.Transaction
 
 
-import com.example.ml_challenge.list.TransactionsFragment.OnListFragmentInteractionListener
 import com.example.ml_challenge.list.dummy.DummyContent.DummyItem
 
 import kotlinx.android.synthetic.main.fragment_transactions.view.*
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
- * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
  */
 class TransactionsRecyclerViewAdapter(
 //    private val mValues: List<DummyItem>,
-    private val mValues: List<Transaction>,
-    private val mListener: OnListFragmentInteractionListener?
+    private val mValues: List<Transaction>
 ) : RecyclerView.Adapter<TransactionsRecyclerViewAdapter.ViewHolder>() {
-
-    private val mOnClickListener: View.OnClickListener
-
-    init {
-        mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyItem
-            // Notify the active callbacks interface (the activity, if the fragment is attached to
-            // one) that an item has been selected.
-            mListener?.onListFragmentInteraction(item)
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -46,11 +31,6 @@ class TransactionsRecyclerViewAdapter(
         val item = mValues[position]
         holder.mIdView.text = item.description
         holder.mContentView.text = item.amount.toString()
-
-        with(holder.mView) {
-            tag = item
-            setOnClickListener(mOnClickListener)
-        }
     }
 
     override fun getItemCount(): Int = mValues.size

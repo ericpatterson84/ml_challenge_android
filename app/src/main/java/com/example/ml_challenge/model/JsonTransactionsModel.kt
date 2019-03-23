@@ -9,10 +9,10 @@ import java.io.BufferedReader
 
 class JsonTransactionsModel : ITransactionModel {
 
-    private var transactionMap : Map<UInt, List<Transaction>>? = null
+    private var transactionMap = emptyMap<UInt, List<Transaction>>()
 
     fun populateModel(context: Context) {
-        if(transactionMap == null) {
+        if(transactionMap.isEmpty()) {
             val inputStream = context.resources.openRawResource(R.raw.account_transactions)
             val transactionJsonStr = inputStream.bufferedReader().use(BufferedReader::readText)
 
@@ -25,10 +25,6 @@ class JsonTransactionsModel : ITransactionModel {
     }
 
     override fun getTransactionsForAccount(accountId: UInt): List<Transaction>? {
-        transactionMap?.let{
-            return transactionMap!![accountId]
-        }
-
-        return null
+        return transactionMap[accountId]
     }
 }

@@ -29,9 +29,9 @@ class AccountsFragment : Fragment() {
     // TODO: Customize parameters
     private var columnCount = 1
 
-    private var listener: OnListFragmentInteractionListener? = null
+    private var listener: OnAccountListInteractionListener? = null
 
-    private var accountList : List<Account>? = null
+//    private var accountList : List<Account>? = null
 
     private var accountsModel: IAccountsModel? = null
 
@@ -61,8 +61,8 @@ class AccountsFragment : Fragment() {
                     else -> GridLayoutManager(context, columnCount)
                 }
 //                adapter = AccountsRecyclerViewAdapter(DummyContent.ITEMS, listener)
-                accountList?.let {
-                    adapter = AccountsRecyclerViewAdapter(accountList!!, listener)
+                accountsModel?.let {
+                    adapter = AccountsRecyclerViewAdapter(it.getAllAccounts(), listener)
                 }
             }
         }
@@ -71,7 +71,7 @@ class AccountsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnListFragmentInteractionListener) {
+        if (context is OnAccountListInteractionListener) {
             listener = context
         } else {
             throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
@@ -94,9 +94,9 @@ class AccountsFragment : Fragment() {
      * [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html)
      * for more information.
      */
-    interface OnListFragmentInteractionListener {
+    interface OnAccountListInteractionListener {
         // TODO: Update argument type and name
 //        fun onListFragmentInteraction(item: DummyItem?)
-        fun onListFragmentInteraction(item: Account?)
+        fun onAccountListInteraction(item: Account?)
     }
 }

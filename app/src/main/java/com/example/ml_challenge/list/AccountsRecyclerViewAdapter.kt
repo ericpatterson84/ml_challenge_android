@@ -9,20 +9,20 @@ import com.example.ml_challenge.R
 import com.example.ml_challenge.data.Account
 
 
-import com.example.ml_challenge.list.AccountsFragment.OnListFragmentInteractionListener
+import com.example.ml_challenge.list.AccountsFragment.OnAccountListInteractionListener
 import com.example.ml_challenge.list.dummy.DummyContent.DummyItem
 
 import kotlinx.android.synthetic.main.fragment_accounts.view.*
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
- * specified [OnListFragmentInteractionListener].
+ * specified [OnAccountListInteractionListener].
  * TODO: Replace the implementation with code for your data type.
  */
 class AccountsRecyclerViewAdapter(
 //    private val mValues: List<DummyItem>,
     private val mValues: List<Account>,
-    private val mListener: OnListFragmentInteractionListener?
+    private val mListener: OnAccountListInteractionListener?
 ) : RecyclerView.Adapter<AccountsRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
@@ -33,7 +33,7 @@ class AccountsRecyclerViewAdapter(
             val item = v.tag as Account
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
-            mListener?.onListFragmentInteraction(item)
+            mListener?.onAccountListInteraction(item)
         }
     }
 

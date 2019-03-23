@@ -1,10 +1,13 @@
 package com.example.ml_challenge
 
+import android.app.ActivityOptions
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.example.ml_challenge.data.Account
 import com.example.ml_challenge.list.AccountsFragment
+import com.example.ml_challenge.list.TransactionsFragment
 import com.example.ml_challenge.model.JsonAccountsModel
 import com.example.ml_challenge.model.JsonTransactionsModel
 import com.example.ml_challenge.parser.AccountParser
@@ -12,8 +15,9 @@ import com.example.ml_challenge.parser.TransactionParser
 import org.json.JSONArray
 import java.io.BufferedReader
 
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), AccountsFragment.OnListFragmentInteractionListener {
+class MainActivity : AppCompatActivity(), AccountsFragment.OnAccountListInteractionListener {
 
     var accountsModel: JsonAccountsModel? = null
     var transactionsModel: JsonTransactionsModel? = null
@@ -23,49 +27,59 @@ class MainActivity : AppCompatActivity(), AccountsFragment.OnListFragmentInterac
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
-            if(accountsModel == null) {
-                accountsModel = JsonAccountsModel()
-                accountsModel!!.populateModel(baseContext)
-            }
-            val accountsFragment = AccountsFragment()
-            accountsFragment.setModel(accountsModel!!)
-
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.root_layout, accountsFragment, "accountsList")
-                .commit()
+            // TODO: Logic for Open button visibility
         }
 
-//        val accountsJsonStr = readRawTextFile(baseContext, R.raw.list_of_accounts)
+        openBtn.setOnClickListener{
+            if(accountsModel == null) {
+                accountsModel = JsonAccountsModel()
+            }
+            showAccountsList()
+        }
+    }
+
+    private fun showAccountsList() {
+//        accountsModel?.let {
+//            it.populateModel(baseContext)
+//            val accountsFragment = AccountsFragment()
+//            accountsFragment.setModel(it)
 //
-//        accountsJsonStr?.let {
-//            val accountsJsonArray = JSONArray(it)
-//            val ap = AccountParser()
-//            val accounts = ap.getAccountsFromJson(accountsJsonArray)
-//
-//            println("size: " + accounts.size)
-//            for(a in accounts) {
-//                println("account: " + a.id + " " + a.number + " " +  a.name + " " + a.balance)
-//            }
+//            supportFragmentManager
+//                .beginTransaction()
+//                .add(R.id.root_layout, accountsFragment, "accountsList")
+//                .commit()
 //        }
+
+        val intent = Intent(this, AccountsActivity::class.java)
+        // create the transition animation - the images in the layouts
+        // of both activities are defined with android:transitionName="robot"
+//        val options = ActivityOptions
+//            .makeSceneTransitionAnimation(this, androidRobotView, "robot")
+        // start the new activity
+//        startActivity(intent, options.toBundle())
+        startActivity(intent)
+    }
+
+    private fun showTransactionsList(accountId: UInt) {
+//        transactionsModel?.let {
+//            it.populateModel(baseContext)
+//            val transactionsFragment = TransactionsFragment.newInstance(accountId)
+//            transactionsFragment.model = it
 //
-//        val transactionJsonStr = readRawTextFile(baseContext, R.raw.chequing_account)
-//
-//        transactionJsonStr?.let {
-//            val transactionJsonArray = JSONArray(it)
-//            val tp = TransactionParser()
-//            val transactions = tp.getTransactionsFromJson(transactionJsonArray)
-//
-//            println("size: " + transactions.size)
-//            for(t in transactions) {
-//                println("transaction: " + t.id + " " + t.amount + " " +  t.balance + " " + t.date + " " + t.description + " " + t.uid)
-//            }
+//            supportFragmentManager
+//                .beginTransaction()
+//                .add(R.id.root_layout, transactionsFragment, "transactionsList")
+//                .commit()
 //        }
     }
 
-    override fun onListFragmentInteraction(item: Account?) {
+    override fun onAccountListInteraction(item: Account?) {
         item?.let {
-            println("Account ID: " + item.id)
+            println("Account ID: " + it.id)
+            if(transactionsModel == null) {
+                transactionsModel = JsonTransactionsModel()
+            }
+            showTransactionsList(it.id)
         }
     }
 }

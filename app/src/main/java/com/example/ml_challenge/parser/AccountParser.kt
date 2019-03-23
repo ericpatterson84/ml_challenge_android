@@ -23,6 +23,6 @@ class AccountParser {
         val num = accountObj.getString("account_number")
         val balance = accountObj.getDouble("balance")
 
-        return Account(id, name, num, balance)
+        return Account(id.toUInt(), name, num, balance)
     }
 }

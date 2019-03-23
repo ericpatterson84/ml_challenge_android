@@ -9,10 +9,10 @@ import java.io.BufferedReader
 
 class JsonAccountsModel : IAccountsModel {
 
-    private var accountList : List<Account>? = null
+    private var accountList = emptyList<Account>()
 
     fun populateModel(context: Context) {
-        if(accountList == null) {
+        if(accountList.isEmpty()) {
             val inputStream = context.resources.openRawResource(R.raw.list_of_accounts)
             val accountsJsonStr = inputStream.bufferedReader().use(BufferedReader::readText)
 
@@ -24,7 +24,7 @@ class JsonAccountsModel : IAccountsModel {
         }
     }
 
-    override fun getAllAccounts(): List<Account>? {
+    override fun getAllAccounts(): List<Account> {
         return accountList
     }
 }

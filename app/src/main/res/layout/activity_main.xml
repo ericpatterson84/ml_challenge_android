@@ -43,7 +43,7 @@
                 android:autoSizeMinTextSize="30sp"
                 android:layout_gravity="center"
                 android:textSize="30sp"
-        android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

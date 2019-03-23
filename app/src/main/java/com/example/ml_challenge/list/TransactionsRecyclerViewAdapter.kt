@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.fragment_transactions.view.*
  * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
  */
 class TransactionsRecyclerViewAdapter(
-//    private val mValues: List<DummyItem>,
     private val mValues: List<TransactionsOfDate>
 ) : RecyclerView.Adapter<TransactionsRecyclerViewAdapter.ViewHolder>() {
 
@@ -30,8 +29,8 @@ class TransactionsRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item.description
-        holder.mContentView.text = item.amount.toString()
+        holder.mDescView.text = item.transactions[0].description
+        holder.mAmountView.text = item.transactions[0].amount.toString()
     }
 
     override fun getItemCount(): Int {
@@ -44,12 +43,16 @@ class TransactionsRecyclerViewAdapter(
         return itemCount
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return 0
+    }
+
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.item_number
-        val mContentView: TextView = mView.content
+        val mDescView: TextView = mView.trans_desc
+        val mAmountView: TextView = mView.trans_amount
 
         override fun toString(): String {
-            return super.toString() + " '" + mContentView.text + "'"
+            return super.toString() + " '" + mDescView.text + "'"
         }
     }
 }

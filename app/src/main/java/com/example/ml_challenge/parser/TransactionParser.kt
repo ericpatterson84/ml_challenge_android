@@ -1,12 +1,13 @@
 package com.example.ml_challenge.parser
 
+import android.util.Log
 import com.example.ml_challenge.data.Transaction
 import com.example.ml_challenge.data.TransactionsOfDate
 import org.json.JSONArray
 import org.json.JSONObject
-import java.lang.NumberFormatException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 class TransactionParser {
 
@@ -39,10 +40,15 @@ class TransactionParser {
             val dateObj = transactionsForAccount.getJSONObject(i)
             dateObj?.let {
                 if (it.has("date")) {
-                    val date = it.getString("date")
-                    var transactionsOfDate = TransactionsOfDate(date)
-                    transactionsOfDate.transactions = parseTransactionsForDate(it)
-                    transactionsOfDates.add(transactionsOfDate)
+                    val dateStr = it.getString("date")
+                    try {
+                        val localDate = LocalDate.parse(dateStr, DateTimeFormatter.ISO_DATE)
+                        var transactionsOfDate = TransactionsOfDate(localDate)
+                        transactionsOfDate.transactions = parseTransactionsForDate(it)
+                        transactionsOfDates.add(transactionsOfDate)
+                    } catch (e: DateTimeParseException) {
+                        Log.e("TransactionParser", "Unexpected date format for transaction. Unable to parse")
+                    }
                 }
             }
         }
@@ -69,14 +75,6 @@ class TransactionParser {
     }
 
     private fun parseTransactionObject(transactionObj: JSONObject) : Transaction {
-//        {
-//            "id": 158,
-//            "date": "2017-11-30",
-//            "description": "Interest Posting",
-//            "withdrawal_amount": 56.66,
-//            "balance": 101477.2,
-//            "transaction_uid": 7980194686
-//        },
         val id = transactionObj.getInt("id")
         val desc = transactionObj.getString("description")
 

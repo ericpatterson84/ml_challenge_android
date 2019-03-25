@@ -10,40 +10,41 @@
         android:background="@color/colorPrimary">
 
     <Button
-            android:text="@string/open"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/openBtn"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:textColorLink="@color/colorPrimary" android:paddingLeft="60dp" android:paddingRight="60dp"
-            android:paddingTop="20dp" android:paddingBottom="20dp"/>
+        android:text="@string/open"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/openBtn"
+        android:background="@android:color/white"
+        android:textColorLink="@android:color/black"
+        android:paddingLeft="60dp" android:paddingRight="60dp"
+        android:paddingTop="20dp" android:paddingBottom="20dp"/>
 
     <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/openBtn"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/openBtn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
 
         <ImageView
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                app:srcCompat="@drawable/sharp_terrain_white_48"
-                android:id="@+id/imageView"/>
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            app:srcCompat="@drawable/sharp_terrain_white_48"
+            android:id="@+id/imageView"/>
         <TextView
-                android:text="@string/bank_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView"
-                android:autoSizeMinTextSize="30sp"
-                android:layout_gravity="center"
-                android:textSize="30sp"
-                android:textColor="@android:color/white"/>
+            android:text="@string/bank_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            android:autoSizeMinTextSize="30sp"
+            android:layout_gravity="center"
+            android:textSize="30sp"
+            android:textColor="@android:color/white"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

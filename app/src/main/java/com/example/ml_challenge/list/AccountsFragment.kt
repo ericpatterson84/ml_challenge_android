@@ -3,7 +3,6 @@ package com.example.ml_challenge.list
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -11,14 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.ml_challenge.R
 import com.example.ml_challenge.data.Account
-
-import com.example.ml_challenge.list.dummy.DummyContent
-import com.example.ml_challenge.list.dummy.DummyContent.DummyItem
 import com.example.ml_challenge.model.IAccountsModel
 import com.example.ml_challenge.model.JsonAccountsModel
-import com.example.ml_challenge.parser.AccountParser
-import org.json.JSONArray
-import java.io.BufferedReader
 
 /**
  * A fragment representing a list of Items.
@@ -27,20 +20,9 @@ import java.io.BufferedReader
  */
 class AccountsFragment : Fragment() {
 
-    // TODO: Customize parameters
-    private var columnCount = 1
-
     private var listener: OnAccountListInteractionListener? = null
 
     var model: IAccountsModel? = null
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//
-//        arguments?.let {
-//            columnCount = it.getInt(ARG_COLUMN_COUNT)
-//        }
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,11 +33,8 @@ class AccountsFragment : Fragment() {
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }
-//                adapter = AccountsRecyclerViewAdapter(DummyContent.ITEMS, listener)
+                layoutManager = LinearLayoutManager(context)
+
                 model?.let {
                     adapter = AccountsRecyclerViewAdapter(it.getAllAccounts(), listener)
                 }
@@ -96,7 +75,6 @@ class AccountsFragment : Fragment() {
      */
     interface OnAccountListInteractionListener {
         // TODO: Update argument type and name
-//        fun onListFragmentInteraction(item: DummyItem?)
         fun onAccountListInteraction(item: Account?)
     }
 }

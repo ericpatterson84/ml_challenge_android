@@ -10,18 +10,15 @@ import com.example.ml_challenge.data.Account
 
 
 import com.example.ml_challenge.list.AccountsFragment.OnAccountListInteractionListener
-import com.example.ml_challenge.list.dummy.DummyContent.DummyItem
+import com.example.ml_challenge.util.FormatUtils
 
 import kotlinx.android.synthetic.main.fragment_accounts.view.*
-import kotlinx.android.synthetic.main.fragment_transactions.view.*
 
 /**
- * [RecyclerView.Adapter] that can display a [DummyItem] and makes a call to the
+ * [RecyclerView.Adapter] that can display a [Account] and makes a call to the
  * specified [OnAccountListInteractionListener].
- * TODO: Replace the implementation with code for your data type.
  */
 class AccountsRecyclerViewAdapter(
-//    private val mValues: List<DummyItem>,
     private val mValues: List<Account>,
     private val mListener: OnAccountListInteractionListener?
 ) : RecyclerView.Adapter<AccountsRecyclerViewAdapter.ViewHolder>() {
@@ -30,7 +27,6 @@ class AccountsRecyclerViewAdapter(
 
     init {
         mOnClickListener = View.OnClickListener { v ->
-//            val item = v.tag as DummyItem
             val item = v.tag as Account
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
@@ -46,9 +42,9 @@ class AccountsRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mIdView.text = item.number
+        holder.mIdView.text = '#' + item.number
         holder.mNameView.text = item.name
-        holder.mBalanceView.text = item.balance.toString()
+        holder.mBalanceView.text = FormatUtils.formattedAmountString(item.balance)
 
         with(holder.mView) {
             tag = item

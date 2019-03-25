@@ -12,6 +12,11 @@
         <activity android:name=".AccountsActivity">
         </activity>
         <activity android:name=".TransactionsActivity">
+            android:parentActivityName="com.example.ml_challenge.AccountsActivity" >
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ml_challenge.AccountsActivity" />
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>

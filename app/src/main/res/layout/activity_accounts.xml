@@ -6,15 +6,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".AccountsActivity"
-        android:background="@color/colorPrimary">
+        android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/accounts_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/text_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="@string/accounts"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/body1"/>
 
     <fragment
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/accountsFragment"
-            android:name="com.example.ml_challenge.list.AccountsFragment"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/accountsFragment"
+        android:name="com.example.ml_challenge.list.AccountsFragment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/accounts_label"
+        android:layout_marginTop="@dimen/text_margin"
     />
 </android.support.constraint.ConstraintLayout>

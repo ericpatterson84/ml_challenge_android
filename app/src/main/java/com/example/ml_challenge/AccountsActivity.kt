@@ -1,48 +1,34 @@
 package com.example.ml_challenge
 
-import android.app.ActivityOptions
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.example.ml_challenge.data.Account
 import com.example.ml_challenge.list.AccountsFragment
-import com.example.ml_challenge.model.JsonAccountsModel
-import kotlinx.android.synthetic.main.activity_accounts.*
 
 class AccountsActivity : AppCompatActivity(), AccountsFragment.OnAccountListInteractionListener{
-
-    companion object {
-        const val ARG_ACCOUNT_ID = "account-id"
-        const val ARG_ACCOUNT_NAME = "account-name"
-        const val ARG_ACCOUNT_BALANCE = "account-balance"
-    }
-
-//    var accountsModel: JsonAccountsModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_accounts)
 
         supportActionBar?.let {
-            it.title = getString(R.string.accounts)
+            it.title = getString(R.string.bank_name)
 
         }
+    }
 
-        if (savedInstanceState == null) {
+    override fun onResume() {
+        super.onResume()
 
-//            accountsModel = JsonAccountsModel()
-//            accountsModel?.let {
-//                it.populateModel(baseContext)
-//                accountsFragment.model = it
-//
-//                supportFragmentManager
-//                    .beginTransaction()
-//                    .add(R.id.accountsFragment, accountsFragment, "accountsList")
-//                    .commit()
-//            }
-        }
+        // Clear the app quit flag
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(baseContext)
+        sharedPref.edit()
+            .putBoolean(getString(R.string.quit_preference_key), false)
+            .apply()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -52,18 +38,9 @@ class AccountsActivity : AppCompatActivity(), AccountsFragment.OnAccountListInte
 
     override fun onAccountListInteraction(item: Account?) {
         item?.let {
-            println("Account ID: " + it.id)
-
-            // create the transition animation - the images in the layouts
-            // of both activities are defined with android:transitionName="robot"
-//        val options = ActivityOptions
-//            .makeSceneTransitionAnimation(this, androidRobotView, "robot")
-            // start the new activity
-
             val intent = Intent(this, TransactionsActivity::class.java)
-//            val bundle = Bundle()
-//            bundle.putInt(ARG_ACCOUNT_ID, it.id.toInt())
 
+            // Pass account details to transactions activity
             intent.putExtra(ARG_ACCOUNT_ID, it.id.toInt())
             intent.putExtra(ARG_ACCOUNT_NAME, it.name)
             intent.putExtra(ARG_ACCOUNT_BALANCE, it.balance)
@@ -74,9 +51,13 @@ class AccountsActivity : AppCompatActivity(), AccountsFragment.OnAccountListInte
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_quit -> {
-            // Clear app opened flag
-            // Quit app
-            println("QUIT")
+            // Set the app quit flag
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(baseContext)
+            sharedPref.edit()
+                .putBoolean(getString(R.string.quit_preference_key), true)
+                .apply()
+            //Cleanly exit the app
+            finishAndRemoveTask()
             true
         }
 
@@ -84,6 +65,24 @@ class AccountsActivity : AppCompatActivity(), AccountsFragment.OnAccountListInte
             // If we got here, the user's action was not recognized.
             // Invoke the superclass to handle it.
             super.onOptionsItemSelected(item)
+        }
+    }
+
+    companion object {
+        const val ARG_ACCOUNT_ID = "account-id"
+        const val ARG_ACCOUNT_NAME = "account-name"
+        const val ARG_ACCOUNT_BALANCE = "account-balance"
+
+        fun formattedAmountString(amount: Double) : String {
+            var tmp = amount
+            var amountStr = ""
+            if(amount < 0) {
+                amountStr = "-"
+                tmp *= -1.0
+            }
+
+            amountStr += "$$tmp"
+            return amountStr
         }
     }
 }

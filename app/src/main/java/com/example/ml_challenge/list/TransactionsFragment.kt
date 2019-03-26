@@ -20,7 +20,7 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapt
  */
 class TransactionsFragment : Fragment() {
 
-    private var accountId = 0U
+    private var mAccountId = 0U
 
     var model : ITransactionModel? = null
 
@@ -28,7 +28,7 @@ class TransactionsFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            accountId = it.getInt(AccountsActivity.ARG_ACCOUNT_ID).toUInt()
+            mAccountId = it.getInt(AccountsActivity.ARG_ACCOUNT_ID).toUInt()
         }
     }
 
@@ -43,12 +43,12 @@ class TransactionsFragment : Fragment() {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
                 model?.let {
-                    val transactions : List<TransactionsOfDate>? = it.getTransactionsForAccount(accountId)
-                    transactions?.let { t ->
+                    val transactions : List<TransactionsOfDate>? = it.getTransactionsForAccount(mAccountId)
+                    transactions?.let { transList ->
                         val sectionAdapter = SectionedRecyclerViewAdapter()
-                        for(tod in t) {
-                            val formattedDateStr = FormatUtils.formattedDateString(tod.date)
-                            sectionAdapter.addSection(HeaderRecyclerViewSection(formattedDateStr, tod.transactions))
+                        for(transOfDate in transList) {
+                            val formattedDateStr = FormatUtils.formattedDateString(transOfDate.date)
+                            sectionAdapter.addSection(HeaderRecyclerViewSection(formattedDateStr, transOfDate.transactions))
                         }
                         adapter = sectionAdapter
                     }

@@ -37,7 +37,7 @@
             app:srcCompat="@drawable/sharp_terrain_white_48"
             android:id="@+id/imageView"/>
         <TextView
-            android:text="@string/bank_name"
+            android:text="@string/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView"

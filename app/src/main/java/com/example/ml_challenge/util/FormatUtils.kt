@@ -1,8 +1,7 @@
 package com.example.ml_challenge.util
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FormatUtils {
     companion object {
@@ -41,9 +40,10 @@ class FormatUtils {
             return builder.toString()
         }
 
-        fun formattedDateString(date: LocalDate) : String {
-            val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
-            return date.format(formatter)
+        fun formattedDateString(date: Date) : String {
+            val pattern = "MMMM dd, yyyy"
+            val simpleDateFormat = SimpleDateFormat(pattern)
+            return simpleDateFormat.format(date)
         }
     }
 }

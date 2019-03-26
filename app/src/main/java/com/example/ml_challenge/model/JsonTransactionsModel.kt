@@ -1,7 +1,6 @@
 package com.example.ml_challenge.model
 
 import android.content.Context
-import com.example.ml_challenge.R
 import com.example.ml_challenge.data.TransactionsOfDate
 import com.example.ml_challenge.parser.TransactionParser
 import org.json.JSONArray
@@ -11,10 +10,10 @@ class JsonTransactionsModel : ITransactionModel {
 
     private var transactionMap = emptyMap<UInt, List<TransactionsOfDate>>()
 
-    override fun populateModel(context: Context) {
+    fun populateModel(context: Context?, resId: Int?) {
         if(transactionMap.isEmpty()) {
-            val inputStream = context.resources.openRawResource(R.raw.account_transactions)
-            val transactionJsonStr = inputStream.bufferedReader().use(BufferedReader::readText)
+            val inputStream = context?.resources?.openRawResource(resId!!)
+            val transactionJsonStr = inputStream!!.bufferedReader().use(BufferedReader::readText)
 
             val transactionJsonArray = JSONArray(transactionJsonStr)
             val parser = TransactionParser()

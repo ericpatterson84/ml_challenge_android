@@ -11,7 +11,7 @@ class JsonAccountsModel : IAccountsModel {
 
     private var accountList = emptyList<Account>()
 
-    override fun populateModel(context: Context) {
+    fun populateModel(context: Context) {
         if(accountList.isEmpty()) {
             val inputStream = context.resources.openRawResource(R.raw.list_of_accounts)
             val accountsJsonStr = inputStream.bufferedReader().use(BufferedReader::readText)

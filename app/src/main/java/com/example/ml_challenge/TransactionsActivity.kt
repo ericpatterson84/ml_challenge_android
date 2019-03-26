@@ -3,21 +3,25 @@ package com.example.ml_challenge
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.example.ml_challenge.list.TransactionsFragment
-import com.example.ml_challenge.model.ITransactionModel
+import com.example.ml_challenge.model.IDataModelListener
 import com.example.ml_challenge.model.JsonTransactionsModel
+import com.example.ml_challenge.model.ReadTransactionsTask
 import com.example.ml_challenge.util.FormatUtils
 import kotlinx.android.synthetic.main.activity_transactions.*
+import java.lang.ref.WeakReference
 
-class TransactionsActivity : AppCompatActivity() {
+class TransactionsActivity : AppCompatActivity(), IDataModelListener {
 
-    private var transactionsModel: ITransactionModel? = null
+    private var transactionsModel: JsonTransactionsModel? = null
+
+    private var accountId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_transactions)
 
         intent?.let {
-            val accountId = it.getIntExtra(AccountsActivity.ARG_ACCOUNT_ID, 0)
+            accountId = it.getIntExtra(AccountsActivity.ARG_ACCOUNT_ID, 0)
             val accountName = it.getStringExtra(AccountsActivity.ARG_ACCOUNT_NAME)
             val accountBalance = it.getDoubleExtra(AccountsActivity.ARG_ACCOUNT_BALANCE, 0.0)
 
@@ -28,18 +32,24 @@ class TransactionsActivity : AppCompatActivity() {
             account_name_large.text = accountName
             account_balance_large.text = FormatUtils.formattedAmountString(accountBalance)
 
-            val tf = TransactionsFragment.newInstance(accountId.toUInt())
+
             if(transactionsModel == null) {
                 transactionsModel = JsonTransactionsModel()
             }
 
-            transactionsModel?.let { tm ->
-                tm.populateModel(baseContext)
-                tf.model = tm
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.transactionsLayout, tf, "transactionList")
-                    .commitNow()
-            }
+            // Read transactions on background thread. This could simulate fetching from a server with high latency
+            ReadTransactionsTask(WeakReference(baseContext), transactionsModel, this)
+                .execute(R.raw.account_transactions)
+        }
+    }
+
+    override fun populateModelComplete(result: Boolean) {
+        if(result) {
+            val fragment = TransactionsFragment.newInstance(accountId.toUInt())
+            fragment.model = transactionsModel
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.transactionsLayout, fragment, "transactionList")
+                .commitNow()
         }
     }
 }

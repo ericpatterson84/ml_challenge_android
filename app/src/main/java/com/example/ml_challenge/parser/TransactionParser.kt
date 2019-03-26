@@ -5,6 +5,8 @@ import com.example.ml_challenge.data.Transaction
 import com.example.ml_challenge.data.TransactionsOfDate
 import org.json.JSONArray
 import org.json.JSONObject
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -42,11 +44,12 @@ class TransactionParser {
                 if (it.has("date")) {
                     val dateStr = it.getString("date")
                     try {
-                        val localDate = LocalDate.parse(dateStr, DateTimeFormatter.ISO_DATE)
-                        var transactionsOfDate = TransactionsOfDate(localDate)
+                        val format = SimpleDateFormat("yyyy-MM-dd");
+                        val date = format.parse(dateStr)
+                        var transactionsOfDate = TransactionsOfDate(date)
                         transactionsOfDate.transactions = parseTransactionsForDate(it)
                         transactionsOfDates.add(transactionsOfDate)
-                    } catch (e: DateTimeParseException) {
+                    } catch (e: ParseException) {
                         Log.e("TransactionParser", "Unexpected date format for transaction. Unable to parse")
                     }
                 }

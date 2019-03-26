@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.ml_challenge.R
 import com.example.ml_challenge.data.Account
-import com.example.ml_challenge.model.IAccountsModel
 import com.example.ml_challenge.model.JsonAccountsModel
 
 /**
@@ -20,9 +19,9 @@ import com.example.ml_challenge.model.JsonAccountsModel
  */
 class AccountsFragment : Fragment() {
 
-    private var listener: OnAccountListInteractionListener? = null
+    private var mAccountListener: OnAccountListInteractionListener? = null
 
-    var model: IAccountsModel? = null
+    private var mModel: JsonAccountsModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,8 +34,8 @@ class AccountsFragment : Fragment() {
             with(view) {
                 layoutManager = LinearLayoutManager(context)
 
-                model?.let {
-                    adapter = AccountsRecyclerViewAdapter(it.getAllAccounts(), listener)
+                mModel?.let {
+                    adapter = AccountsRecyclerViewAdapter(it.getAllAccounts(), mAccountListener)
                 }
             }
         }
@@ -46,20 +45,20 @@ class AccountsFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnAccountListInteractionListener) {
-            listener = context
+            mAccountListener = context
         } else {
             throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
         }
 
-        if(model == null) {
-            model = JsonAccountsModel()
+        if(mModel == null) {
+            mModel = JsonAccountsModel()
         }
-        model?.let { it.populateModel(context) }
+        mModel?.let { it.populateModel(context) }
     }
 
     override fun onDetach() {
         super.onDetach()
-        listener = null
+        mAccountListener = null
     }
 
     /**
@@ -74,7 +73,6 @@ class AccountsFragment : Fragment() {
      * for more information.
      */
     interface OnAccountListInteractionListener {
-        // TODO: Update argument type and name
         fun onAccountListInteraction(item: Account?)
     }
 }

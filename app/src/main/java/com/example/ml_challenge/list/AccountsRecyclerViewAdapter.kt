@@ -7,11 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.ml_challenge.R
 import com.example.ml_challenge.data.Account
-
-
 import com.example.ml_challenge.list.AccountsFragment.OnAccountListInteractionListener
 import com.example.ml_challenge.util.FormatUtils
-
 import kotlinx.android.synthetic.main.fragment_accounts.view.*
 
 /**

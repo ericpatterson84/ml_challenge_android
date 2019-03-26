@@ -16,7 +16,7 @@ class AccountsActivity : AppCompatActivity(), AccountsFragment.OnAccountListInte
         setContentView(R.layout.activity_accounts)
 
         supportActionBar?.let {
-            it.title = getString(R.string.bank_name)
+            it.title = getString(R.string.app_name)
 
         }
     }
@@ -72,17 +72,5 @@ class AccountsActivity : AppCompatActivity(), AccountsFragment.OnAccountListInte
         const val ARG_ACCOUNT_ID = "account-id"
         const val ARG_ACCOUNT_NAME = "account-name"
         const val ARG_ACCOUNT_BALANCE = "account-balance"
-
-        fun formattedAmountString(amount: Double) : String {
-            var tmp = amount
-            var amountStr = ""
-            if(amount < 0) {
-                amountStr = "-"
-                tmp *= -1.0
-            }
-
-            amountStr += "$$tmp"
-            return amountStr
-        }
     }
 }

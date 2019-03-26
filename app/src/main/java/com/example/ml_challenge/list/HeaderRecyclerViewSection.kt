@@ -9,13 +9,13 @@ import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters
 import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection
 
 
-class HeaderRecyclerViewSection(private val title: String, private val list: List<Transaction>) : StatelessSection(
+class HeaderRecyclerViewSection(private val mTitle: String, private val mList: List<Transaction>) : StatelessSection(
     SectionParameters.Builder(R.layout.fragment_transactions)
         .headerResourceId(R.layout.fragment_date_header)
         .build()
 ) {
     override fun getContentItemsTotal(): Int {
-        return list.size
+        return mList.size
     }
 
     override fun getItemViewHolder(view: View): RecyclerView.ViewHolder {
@@ -24,8 +24,8 @@ class HeaderRecyclerViewSection(private val title: String, private val list: Lis
 
     override fun onBindItemViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val iHolder = holder as ItemViewHolder
-        iHolder.transDesc.text = list[position].description
-        iHolder.transAmount.text = FormatUtils.formattedAmountString(list[position].amount)
+        iHolder.transDesc.text = mList[position].description
+        iHolder.transAmount.text = FormatUtils.formattedAmountString(mList[position].amount)
     }
 
     override fun getHeaderViewHolder(view: View): RecyclerView.ViewHolder {
@@ -35,7 +35,7 @@ class HeaderRecyclerViewSection(private val title: String, private val list: Lis
     override fun onBindHeaderViewHolder(holder: RecyclerView.ViewHolder?) {
         val hHolder = holder as HeaderViewHolder?
         hHolder?.let {
-            it.headerTitle.text = title
+            it.headerTitle.text = mTitle
         }
     }
 

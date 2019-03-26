@@ -6,11 +6,14 @@ This is an Android app for the ficticious Alpine Bank. It is an implementation o
 2. See transactions for any account grouped by date
 
 ## Build Instructions
+NOTE: This has only been tested with latest Android Studio v3.3.2 for Windows x64
 1. Clone this repo to your local computer
 2. Open the project in a recent version of Android Studio
-3. Build the source code via "Build -> Make Project" menu option
-4. Create an Android Virtual Device or connect an Android phone running at least Android 5.0 (Lollipop)
-6. Choose "Run -> Run app" menu option to deploy the app to your chosen device
+3. The project is set to build against Android SDK & Build Tools v28. Ensure those have been downloaded from Android SDK Manager
+4. Any dependencies you don't have locally should be downloaded automatically
+5. Build the source code via "Build -> Make Project" menu option
+6. Create an Android Virtual Device or connect an Android phone running at least Android 5.0 (Lollipop)
+7. Choose "Run -> Run app" menu option to deploy the app to your chosen device
 
 ## Usage Instructions
 1. Press the OPEN button on the splash screen
